@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "admin",
+    "password": "111111",
+    "database": "db_app_dokumen",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "admin",
+    "password": "111111",
+    "database": "db_app_dokumen_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "admin",
+    "password": "111111",
+    "database": "db_app_dokumen_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
