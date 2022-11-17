@@ -213,6 +213,7 @@ module.exports = class {
     static async createSubCategory(req, res) {
         try {
             const result = await sub_categories.create({
+                category_id: req.body.category_id,
                 name: req.body.name,
                 order: req.body.order
             })
@@ -251,6 +252,7 @@ module.exports = class {
         else {
             try {
                 const result = await sub_categories.update({
+                    sub_category: req.body.sub_category,
                     name: req.body.name,
                     order: req.body.order
                 }, { where: { id: req.params.id } })

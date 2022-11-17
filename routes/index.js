@@ -19,14 +19,6 @@ const auth = require('../middleware/auth')
 //   res.render('index', { title: 'Express' });
 // });
 
-// router.get('/tes', function(req, res) {
-//   res.status(201)
-//   res.send({
-//     message: "Berhasil!",
-//     data: req.headers
-//   })
-// })
-
 // router.get('/tes', func.getTestData)
 // router.get('/tes/:id', func.getPathParameter)
 // router.get('/books', func.getQueryParameter)
@@ -44,6 +36,10 @@ router.post('/u/regist', uc.createUser)
 // router.get('/t/download', tc.downloadTemp) //apakah untuk mengunduh perlu api??
 
 // // LOGIN USER
+router.get('/u/profile/:id', uc.getUserProfileById)
+router.post('/u/:id/edit-profile', uc.editUserProfile)
+router.post('/u/:id/change-pass', uc.changePassword)
+
 // router.get('/d/user', auth, dc.getDocsByUser) //query parameter ?id=
 // router.post('/d/create', auth, dc.createDoc) //kalau pakai template, tambahin aja id-nya di query parameter
 // router.post('/d/:id/edit', auth, dc.editDoc) //save juga pakai ini
@@ -64,12 +60,13 @@ router.post('/u/regist', uc.createUser)
 // router.post('/s/:id/send-review', auth, tc.sendReview) //konsepnya seperti edit submission
 
 // ADMIN
-// router.get('/u', auth, uc.getUsers)
-// router.get('/u/:id', auth, uc.getUserById)
-// router.put('/u/update/:id', auth, uc.editUser)
+router.get('/u', auth, uc.getUsers)
+router.get('/u/:id', auth, uc.getUserById)
+router.post('/u/update/:id', auth, uc.editUserByAdmin)
 // router.delete('/u/delete/:id', auth, uc.deleteUser)
 // router.post('/u/delete', auth, uc.deleteAllUser)
 // router.post('/u/disable/:id', auth, uc.softDeleteUser)
+router.post('/u/:id/change-user-pass', uc.changePasswordByAdmin)
 
 // router.get('/d', auth, dc.getDocs)
 // router.delete('/d/:id/delete', auth, dc.deleteDoc)
@@ -86,6 +83,7 @@ router.delete('/c/:id/delete', mc.deleteCategory)
 router.get('/sc', mc.getSubCategories)
 router.get('/sc/:id', mc.getSubCategoryById)
 router.post('/sc/create', mc.createSubCategory)
+router.post('/sc/:id/edit', mc.editSubCategory)
 router.delete('/sc/:id/delete', mc.deleteSubCategory)
 
 router.get('/r', mc.getRoles)
@@ -104,7 +102,7 @@ router.get('/ss', mc.getSubStatuses)
 router.get('/ss/:id', mc.getSubStatusById)
 router.post('/ss/create', mc.createSubStatus)
 router.post('/ss/:id/edit', mc.editSubStatus)
-router.delete('/ss/:id', mc.deleteSubStatus)
+router.delete('/ss/:id/delete', mc.deleteSubStatus)
 
 router.get('/l', mc.getLanguages)
 router.get('/l/:id', mc.getLanguageById)
