@@ -40,10 +40,11 @@ router.get('/u/profile/:id', uc.getUserProfileById)
 router.post('/u/:id/edit-profile', uc.editUserProfile)
 router.post('/u/:id/change-pass', uc.changePassword)
 
-// router.get('/d/user', auth, dc.getDocsByUser) //query parameter ?id=
-// router.post('/d/create', auth, dc.createDoc) //kalau pakai template, tambahin aja id-nya di query parameter
-// router.post('/d/:id/edit', auth, dc.editDoc) //save juga pakai ini
-// router.delete('/d/:id/delete', auth, dc.deleteDocByUser) //save delete kah?
+router.get('/d/user', dc.getDocsByUser) //query parameter ?id=
+router.get('/d/:id', dc.getDocById)
+router.post('/d/create', dc.createDoc) //kalau pakai template, tambahin aja id-nya di query parameter
+router.post('/d/:id/edit', dc.editDoc) //save juga pakai ini, pakai query u_id=
+router.delete('/d/:id/delete', auth, dc.deleteDoc) //save delete kah?
 
 // // router.post('/d/create/:temp_id', auth, dc.createDocByTemp)
 // //buat tampilan halaman kalau dokumennya kosong (belum pernah buat)
@@ -68,8 +69,9 @@ router.post('/u/update/:id', auth, uc.editUserByAdmin)
 // router.post('/u/disable/:id', auth, uc.softDeleteUser)
 router.post('/u/:id/change-user-pass', uc.changePasswordByAdmin)
 
-// router.get('/d', auth, dc.getDocs)
-// router.delete('/d/:id/delete', auth, dc.deleteDoc)
+router.get('/d', auth, dc.getDocs)
+router.post('/d/:id/edit-admin', dc.editDocByAdmin)
+router.delete('/d/:id/delete-admin', auth, dc.deleteDocByAdmin)
 
 // router.get('/t', auth, tc.getTemplates)
 // router.delete('/t/:id/delete', auth, tc.deleteTemp)
