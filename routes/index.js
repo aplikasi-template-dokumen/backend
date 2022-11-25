@@ -28,10 +28,10 @@ const auth = require('../middleware/auth')
 router.post('/u/login', uc.login)
 router.post('/u/regist', uc.createUser)
 
-// router.get('/t', tc.getTemplates)
-// router.get('/t/search', tc.getTempByKeyword) //query parameter ?key=
-// router.get('/t/:category', tc.getTempByCategory)
-// router.get('/t/filter', tc.filterTemp) //query parameter ?lang=&sub=
+router.get('/t-all', tc.getTempsAll)
+router.get('/t/search', tc.getTempByKeyword) //query parameter ?key=
+router.get('/t/cat/:category', tc.getTempsByCategory)
+router.get('/t/filter/:lang/:sub', tc.filterTemp) //query parameter ?lang=&sub=
 // router.get('/t/:temp_id', tc.getTemplateById)
 // router.get('/t/download', tc.downloadTemp) //apakah untuk mengunduh perlu api??
 
@@ -50,14 +50,15 @@ router.delete('/d/:id/delete', auth, dc.deleteDoc) //save delete kah?
 // //buat tampilan halaman kalau dokumennya kosong (belum pernah buat)
 
 // // CONTRIBUTOR
-// router.get('/t/user', auth, tc.getTempByUser) //query parameter ?id=
-// router.post('/t/create', auth, tc.createTemplate) //query parameter ?uid=
-// router.post('/t/:id/edit', auth, tc.editTemp)
-// router.delete('/t/:id/delete', auth, tc.deleteTempByUser)
+router.get('/t/user', tc.getTempsByUser) //query ?id=
+router.get('/t/:id', tc.getTempById)
+router.post('/t/create', auth, tc.createTemp) //query ?uid=
+router.post('/t/:id/edit', auth, tc.editTemp)
+router.delete('/t/:id/delete', auth, tc.deleteTemp)
 
 // // REVIEWER
-// router.get('/s', auth, tc.getSubmissions)
-// router.get('/s/:id', auth, tc.getSubmissionById)
+router.get('/s', auth, tc.getSubmissions)
+router.get('/s/:id', auth, tc.getSubmissionById)
 // router.post('/s/:id/send-review', auth, tc.sendReview) //konsepnya seperti edit submission
 
 // ADMIN
@@ -73,8 +74,9 @@ router.get('/d', auth, dc.getDocs)
 router.post('/d/:id/edit-admin', dc.editDocByAdmin)
 router.delete('/d/:id/delete-admin', auth, dc.deleteDocByAdmin)
 
-// router.get('/t', auth, tc.getTemplates)
-// router.delete('/t/:id/delete', auth, tc.deleteTemp)
+router.get('/t', auth, tc.getTemps)
+router.post('/t/:id/edit-admin', tc.editTempByAdmin)
+router.delete('/t/:id/delete-admin', auth, tc.deleteTempByAdmin)
 
 router.get('/c', mc.getCategories)
 router.get('/c/:id', mc.getCategoryById)
@@ -84,6 +86,7 @@ router.delete('/c/:id/delete', mc.deleteCategory)
 
 router.get('/sc', mc.getSubCategories)
 router.get('/sc/:id', mc.getSubCategoryById)
+router.get('/sc/c/:id', mc.getSubCategoryByCategory)
 router.post('/sc/create', mc.createSubCategory)
 router.post('/sc/:id/edit', mc.editSubCategory)
 router.delete('/sc/:id/delete', mc.deleteSubCategory)

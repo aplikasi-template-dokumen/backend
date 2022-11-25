@@ -201,6 +201,10 @@ module.exports = class {
         else {
             try {
                 await documents.destroy({ where: { id: req.params.id } })
+                res.status(200).send({
+                    status: 200,
+                    message: `Document with id ${req.params.id} has been deleted.`,
+                })
                 // console.log(req.params.id)
             }
 
@@ -224,6 +228,10 @@ module.exports = class {
         else {
             try {
                 await documents.destroy({ where: { id: req.params.id } })
+                res.status(200).send({
+                    status: 200,
+                    message: `Document with id ${req.params.id} has been deleted.`,
+                })
                 // console.log(req.params.id)
             }
 

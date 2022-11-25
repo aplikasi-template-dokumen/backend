@@ -117,9 +117,7 @@ module.exports = class {
     static async login(req, res) {
         try {
             const user = await users.findOne({
-                where: {
-                    username: req.body.uname
-                }
+                where: { username: req.body.uname }
             })
 
             if (!user) {

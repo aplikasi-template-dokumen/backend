@@ -210,6 +210,32 @@ module.exports = class {
         }
     }
 
+    static async getSubCategoryByCategory(req, res) {
+        const result = await sub_categories.findAll({ where: { category_id: req.params.id }, attributes: ['id', 'name'] })
+
+        if (result.length == 0) {
+            res.status(400).send({
+                status: 400,
+                message: 'Data not exist!'
+            })
+        }
+
+        else {
+            try {
+                res.status(200).json({
+                    status: 200,
+                    message: `Sub categories with category id ${req.params.id}`,
+                    data: result
+                })
+            }
+    
+            catch(err) {
+                console.log(err)
+                res.send(err)
+            }
+        }
+    }
+
     static async createSubCategory(req, res) {
         try {
             const result = await sub_categories.create({
