@@ -52,7 +52,7 @@ router.delete('/d/:id/delete', auth, dc.deleteDoc) //save delete kah?
 // // CONTRIBUTOR
 router.get('/t/user', tc.getTempsByUser) //query ?id=
 router.get('/t/:id', tc.getTempById)
-router.post('/t/create', auth, tc.createTemp) //query ?uid=
+router.post('/t/create', tc.createTemp) //query ?uid=
 router.post('/t/:id/edit', auth, tc.editTemp)
 router.delete('/t/:id/delete', auth, tc.deleteTemp)
 
