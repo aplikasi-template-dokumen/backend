@@ -141,12 +141,12 @@ module.exports = class {
                 }
     
                 else {
-                    res.header('role', user.role)
-                    res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+                    // res.header('role', user.role)
+                    // res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
                     res.status(200).send({
                         status: 200,
                         message: 'Login success!',
-                        data: user
+                        data: {"id": user.id, "username": user.username, "role": user.role}
                     })
                 }
             }
