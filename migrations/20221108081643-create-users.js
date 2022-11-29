@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       role: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       email: {
         type: Sequelize.STRING

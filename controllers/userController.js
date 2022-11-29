@@ -89,13 +89,13 @@ module.exports = class {
 
         try {
             const response = await users.create({
-                role: req.body.role,
+                role: 1,
                 email: req.body.email,
                 full_name: req.body.name,
                 username: req.body.uname,
                 occupation_id: req.body.occ_id,
                 password: hash,
-                profile_img: req.body.img,
+                profile_img: null,
                 affiliation: req.body.aff,
                 reviewer_id: null,
                 enable: true
@@ -104,7 +104,7 @@ module.exports = class {
             res.status(201).json({
                 status: 201,
                 message: "User Register Success!",
-                username: req.body.uname
+                data: {"id": response.id, "username": response.username, "role": response.role}
             })
         }
 
