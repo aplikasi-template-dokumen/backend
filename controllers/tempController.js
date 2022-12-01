@@ -57,21 +57,44 @@ module.exports = class {
 
     static async getTempsByCategory(req, res) {
         try {
-            const result = await templates.findAll({ where: { cat_id: req.params.category } })
+            console.log(req.query.lang)
 
-            if (result.length == 0) {
-                res.status(404).send({
-                    status: 400,
-                    message: 'Data not exist!'
-                })
+            if (req.query.lang === undefined) {
+                const result = await templates.findAll({ where: { cat_id: req.params.category } })
+    
+                if (result.length == 0) {
+                    res.status(404).send({
+                        status: 400,
+                        message: 'Data not exist!'
+                    })
+                }
+    
+                else {
+                    res.status(200).json({
+                        status: 200,
+                        message: `All templates with category id ${req.params.category}`,
+                        data: result
+                    })
+                }
             }
 
             else {
-                res.status(200).json({
-                    status: 200,
-                    message: `All templates with category id ${req.params.category}`,
-                    data: result
-                })
+                const result = await templates.findAll({ where: { cat_id: req.params.category, lang_id: req.query.lang } })
+    
+                if (result.length == 0) {
+                    res.status(404).send({
+                        status: 400,
+                        message: 'Data not exist!'
+                    })
+                }
+    
+                else {
+                    res.status(200).json({
+                        status: 200,
+                        message: `All templates with category id ${req.params.category}`,
+                        data: result
+                    })
+                }
             }
         }
 
@@ -83,23 +106,67 @@ module.exports = class {
 
     static async filterTemp(req, res) {
         try {
-            // console.log(req.query.lang)
-            const result = await templates.findAll({ where: { lang_id: req.params.lang, sub_cat_id: req.params.sub } })
-            // const result = await templates.findAll({ where: { [Op.and]: [{ lang_id: req.query.lang }, { sub_cat_id: req.query.sub }] } })
+            console.log(req.params.lang)
+            console.log(req.params.sub)
 
-            if (result.length == 0) {
-                res.status(400).send({
-                    status: 400,
-                    message: 'Data not exist!'
-                })
+            if (req.params.lang == 0) {
+                const result = await templates.findAll({ where: { sub_cat_id: req.params.sub } })
+
+                if (result.length == 0) {
+                    res.status(400).send({
+                        status: 400,
+                        message: 'Data not exist!'
+                    })
+                }
+    
+                else {
+                    res.status(200).json({
+                        status: 200,
+                        message: `All templates with sub category id ${req.params.sub}`,
+                        data: result
+                    })
+                }
+            }
+
+            else
+            if (req.params.sub == 0) {
+                const result = await templates.findAll({ where: { lang_id: req.params.lang } })
+
+                if (result.length == 0) {
+                    res.status(400).send({
+                        status: 400,
+                        message: 'Data not exist!'
+                    })
+                }
+    
+                else {
+                    res.status(200).json({
+                        status: 200,
+                        message: `All templates with language id ${req.params.lang}`,
+                        data: result
+                    })
+                }
             }
 
             else {
-                res.status(200).json({
-                    status: 200,
-                    message: `All templates with language id ${req.params.lang} and sub category id ${req.params.sub}`,
-                    data: result
-                })
+                const result = await templates.findAll({ where: { lang_id: req.params.lang, sub_cat_id: req.params.sub } })
+
+                if (result.length == 0) {
+                    res.status(400).send({
+                        status: 400,
+                        message: 'Data not exist!'
+                    })
+                }
+    
+                else {
+                    res.status(200).json({
+                        status: 200,
+                        message: `All templates with language id ${req.params.lang} and sub category id ${req.params.sub}`,
+                        data: result
+                    })
+                    
+                    // const result = await templates.findAll({ where: { [Op.and]: [{ lang_id: req.query.lang }, { sub_cat_id: req.query.sub }] } })
+                }
             }
         }
 
@@ -147,8 +214,8 @@ module.exports = class {
             const result = await templates.findAll({ where: { status_id: 2 } })
 
             if (result.length == 0) {
-                res.status(404).send({
-                    status: 400,
+                res.send({
+                    status: 404,
                     message: 'Data not exist!'
                 })
             }
@@ -173,7 +240,7 @@ module.exports = class {
             const result = await templates.findAll({ where: { contributor_id: req.query.id } })
 
             if (result.length == 0) {
-                res.status(404).send({
+                res.send({
                     status: 404,
                     message: 'Data not exist!'
                 })
@@ -251,14 +318,14 @@ module.exports = class {
     static async createTemp(req, res) {
         try {
             const response = await templates.create({
-                title: req.body.title,
-                desc: req.body.desc,
-                lang_id: req.body.lang_id,
-                cat_id: req.body.cat_id,
-                sub_cat_id: req.body.sub_cat_id,
-                img: req.body.img,
-                notes: req.body.notes,
-                data: req.body.data,
+                title: 'Untitled',
+                desc: null,
+                lang_id: 1,
+                cat_id: 1,
+                sub_cat_id: 1,
+                img: null,
+                notes: null,
+                data: null,
                 status_id: 1,
                 contributor_id: req.body.contributor_id
             })

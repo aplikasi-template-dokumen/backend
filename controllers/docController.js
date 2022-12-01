@@ -32,7 +32,7 @@ module.exports = class {
             const result = await documents.findAll({ where: { user_id: req.query.id } })
 
             if (result.length == 0) {
-                res.status(404).send({
+                res.send({
                     status: 404,
                     message: 'Data not exist!'
                 })
@@ -83,7 +83,7 @@ module.exports = class {
     static async createDoc(req, res) {
         try {
             const response = await documents.create({
-                title: req.body.title,
+                title: 'Untitled',
                 user_id: req.body.user_id,
                 data: req.body.data
             })
