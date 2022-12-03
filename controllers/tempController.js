@@ -1,4 +1,4 @@
-const { templates, sequelize } = require('../models')
+const { templates, users, categories, sub_categories, submission_status, sequelize } = require('../models')
 const { Op } = require('sequelize')
 
 module.exports = class {
@@ -31,7 +31,7 @@ module.exports = class {
     static async getTempsAll(req, res) {
         try {
             // const result = await templates.findAll()
-            const result = await templates.findAll({ attributes: ['id', 'title', 'desc', 'img', 'data'] })
+            const result = await templates.findAll({where: { status_id: 4 }, attributes: ['id', 'title', 'desc', 'img', 'data'], order: [['updatedAt', 'DESC']] })
 
             if (result.length == 0) {
                 res.status(404).send({
@@ -60,7 +60,7 @@ module.exports = class {
             console.log(req.query.lang)
 
             if (req.query.lang === undefined) {
-                const result = await templates.findAll({ where: { cat_id: req.params.category } })
+                const result = await templates.findAll({ where: { cat_id: req.params.category, status_id: 4 } })
     
                 if (result.length == 0) {
                     res.status(404).send({
@@ -79,7 +79,7 @@ module.exports = class {
             }
 
             else {
-                const result = await templates.findAll({ where: { cat_id: req.params.category, lang_id: req.query.lang } })
+                const result = await templates.findAll({ where: { cat_id: req.params.category, lang_id: req.query.lang, status_id: 4 } })
     
                 if (result.length == 0) {
                     res.status(404).send({
@@ -110,7 +110,7 @@ module.exports = class {
             console.log(req.params.sub)
 
             if (req.params.lang == 0) {
-                const result = await templates.findAll({ where: { sub_cat_id: req.params.sub } })
+                const result = await templates.findAll({ where: { sub_cat_id: req.params.sub, status_id: 4 } })
 
                 if (result.length == 0) {
                     res.status(400).send({
@@ -130,7 +130,7 @@ module.exports = class {
 
             else
             if (req.params.sub == 0) {
-                const result = await templates.findAll({ where: { lang_id: req.params.lang } })
+                const result = await templates.findAll({ where: { lang_id: req.params.lang, status_id: 4 } })
 
                 if (result.length == 0) {
                     res.status(400).send({
@@ -149,7 +149,7 @@ module.exports = class {
             }
 
             else {
-                const result = await templates.findAll({ where: { lang_id: req.params.lang, sub_cat_id: req.params.sub } })
+                const result = await templates.findAll({ where: { lang_id: req.params.lang, sub_cat_id: req.params.sub, status_id: 4 } })
 
                 if (result.length == 0) {
                     res.status(400).send({
@@ -183,7 +183,8 @@ module.exports = class {
             const result = await templates.findAll({
                 // where: { title: { [Op.like]: "%" + req.query.key + "%" } }
                 where: {
-                    title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + lookupValue + '%')
+                    title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + lookupValue + '%'),
+                    status_id: 4
                 }
             })
 
@@ -209,35 +210,9 @@ module.exports = class {
         }
     }
 
-    static async getSubmissions(req, res) {
-        try {
-            const result = await templates.findAll({ where: { status_id: 2 } })
-
-            if (result.length == 0) {
-                res.send({
-                    status: 404,
-                    message: 'Data not exist!'
-                })
-            }
-
-            else {
-                res.status(200).json({
-                    status: 200,
-                    message: 'All Submissions',
-                    data: result
-                })
-            }
-        }
-
-        catch(err) {
-            console.log(err)
-            res.send(err)
-        }
-    }
-
     static async getTempsByUser(req, res) {
         try {
-            const result = await templates.findAll({ where: { contributor_id: req.query.id } })
+            const result = await templates.findAll({ where: { contributor_id: req.query.id }, order: [['updatedAt', 'DESC']], include: [{ model: submission_status, attributes: ['name'], as: 'status' }] })
 
             if (result.length == 0) {
                 res.send({
@@ -288,9 +263,40 @@ module.exports = class {
         }
     }
 
+    static async getSubmissions(req, res) {
+        try {
+            const result = await templates.findAll({ where: { status_id: 2 }, order: [['updatedAt', 'ASC']], include: [{ model: users, attributes: ['username'], as: 'contributor' }] })
+
+            if (result.length == 0) {
+                res.send({
+                    status: 404,
+                    message: 'Data not exist!'
+                })
+            }
+
+            else {
+                res.status(200).json({
+                    status: 200,
+                    message: 'All Submissions',
+                    data: result
+                })
+            }
+        }
+
+        catch(err) {
+            console.log(err)
+            res.send(err)
+        }
+    }
+
     static async getSubmissionById(req, res) {
         try {
-            const result = await templates.findOne({ where: { id: req.params.id, status_id: 2 } })
+            const result = await templates.findOne({ where: { id: req.params.id, status_id: 2 },
+            include: [
+                { model: categories, attributes: ['name'], as: 'cat' },
+                { model: sub_categories, attributes: ['name'], as: 'sub_cat' },
+                { model: users, attributes: ['username'], as: 'contributor' }
+            ] })
 
             if (!result) {
                 res.status(404).send({
@@ -323,7 +329,8 @@ module.exports = class {
                 lang_id: 1,
                 cat_id: 1,
                 sub_cat_id: 1,
-                img: null,
+                // img: null,
+                img: '/img.surat.png',
                 notes: null,
                 data: null,
                 status_id: 1,
@@ -372,6 +379,7 @@ module.exports = class {
                     img: req.body.img,
                     notes: req.body.notes,
                     data: req.body.data,
+                    status_id: req.body.status_id
                 }, { where: { id: req.params.id } })
 
                 if (!result) {
@@ -434,6 +442,55 @@ module.exports = class {
                     res.status(201).send({
                         status: 201,
                         message: `Document with id ${req.params.id} has been updated!`
+                    })
+                }
+            }
+
+            catch(err) {
+                console.log(err)
+                res.send(err)
+            }
+        }
+    }
+
+    static async sendReview(req, res) {
+        const check = await templates.findOne({ where: { id: req.params.id } })
+
+        if (!check) {
+            res.status(400).send({
+                status: 400,
+                message: 'Data not exist! Edit failed.'
+            })
+        }
+
+        // else
+        // if (check.contributor_id != req.query.u_id) {
+        //     res.status(400).send({
+        //         status: 400,
+        //         message: 'Only reviewer can do this action!'
+        //     })
+        // }
+
+        else {
+            try {
+                const result = await templates.update({
+                    notes: req.body.notes,
+                    status_id: req.body.status_id,
+                    reviewer_id: req.query.r_id,
+                    publish_date: req.body.publish_date
+                }, { where: { id: req.params.id } })
+
+                if (!result) {
+                    res.status(400).send({
+                        status: 400,
+                        message: 'Update failed!'
+                    })
+                }
+
+                else {
+                    res.status(201).send({
+                        status: 201,
+                        message: `Template with id ${req.params.id} has been updated!`
                     })
                 }
             }

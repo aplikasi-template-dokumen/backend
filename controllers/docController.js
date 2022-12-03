@@ -29,7 +29,7 @@ module.exports = class {
 
     static async getDocsByUser(req, res) {
         try {
-            const result = await documents.findAll({ where: { user_id: req.query.id } })
+            const result = await documents.findAll({ where: { user_id: req.query.id }, order: [['updatedAt', 'DESC']] })
 
             if (result.length == 0) {
                 res.send({
@@ -83,7 +83,7 @@ module.exports = class {
     static async createDoc(req, res) {
         try {
             const response = await documents.create({
-                title: 'Untitled',
+                title: req.body.title,
                 user_id: req.body.user_id,
                 data: req.body.data
             })

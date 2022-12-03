@@ -1,4 +1,4 @@
-const { users } = require('../models')
+const { users, role, occupations } = require('../models')
 const bcrypt = require('bcrypt')
 // const jwt = require("")
 
@@ -20,7 +20,11 @@ module.exports = class {
 
     static async getUserProfileById(req, res) {
         try {
-            const result = await users.findOne({ where: {id: req.params.id} })
+            const result = await users.findOne({ where: {id: req.params.id},
+                include: [
+                    { model: role, attributes: ['name'], as: 'role_name' },
+                    { model: occupations, attributes: ['name'], as: 'occ' },
+                ] })
             
             if (!result) {
                 res.status(404).json({
@@ -32,11 +36,11 @@ module.exports = class {
             else {
                 const data = {
                     "id": result.id,
-                    "role": result.role,
+                    "role": result.role_name.name,
                     "email": result.email,
                     "full_name": result.full_name,
                     "username": result.username,
-                    "occupation_id": result.occupation_id, //kalau bisa ambil langsung nama pekerjaannya
+                    "occupation": result.occ.name,
                     "affiliation": result.affiliation,
                 }
 

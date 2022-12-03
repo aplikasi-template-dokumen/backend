@@ -11,6 +11,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      templates.belongsTo(models.submission_status, {
+        foreignKey: 'status_id',
+        as: 'status'
+      })
+
+      templates.belongsTo(models.users, {
+        foreignKey: 'contributor_id',
+        as: 'contributor'
+      })
+
+      templates.belongsTo(models.categories, {
+        foreignKey: 'cat_id',
+        as: 'cat'
+      })
+
+      templates.belongsTo(models.sub_categories, {
+        foreignKey: 'sub_cat_id',
+        as: 'sub_cat'
+      })
     }
   }
   templates.init({

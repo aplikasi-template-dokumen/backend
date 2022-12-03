@@ -44,7 +44,7 @@ router.get('/d/user', dc.getDocsByUser) //query parameter ?id=
 router.get('/d/:id', dc.getDocById)
 router.post('/d/create', dc.createDoc) //kalau pakai template, tambahin aja id-nya di query parameter
 router.post('/d/:id/edit', dc.editDoc) //save juga pakai ini, pakai query u_id=
-router.delete('/d/:id/delete', auth, dc.deleteDoc) //save delete kah?
+router.delete('/d/:id/delete', dc.deleteDoc) //save delete kah?
 
 // // router.post('/d/create/:temp_id', auth, dc.createDocByTemp)
 // //buat tampilan halaman kalau dokumennya kosong (belum pernah buat)
@@ -53,13 +53,13 @@ router.delete('/d/:id/delete', auth, dc.deleteDoc) //save delete kah?
 router.get('/t/user', tc.getTempsByUser) //query ?id=
 router.get('/t/:id', tc.getTempById)
 router.post('/t/create', tc.createTemp) //query ?uid=
-router.post('/t/:id/edit', auth, tc.editTemp)
-router.delete('/t/:id/delete', auth, tc.deleteTemp)
+router.post('/t/:id/edit', tc.editTemp)
+router.delete('/t/:id/delete', tc.deleteTemp)
 
 // // REVIEWER
 router.get('/s', auth, tc.getSubmissions)
-router.get('/s/:id', auth, tc.getSubmissionById)
-// router.post('/s/:id/send-review', auth, tc.sendReview) //konsepnya seperti edit submission
+router.get('/s/:id', tc.getSubmissionById)
+router.post('/s/:id/send-review', tc.sendReview) //konsepnya seperti edit submission
 
 // ADMIN
 router.get('/u', auth, uc.getUsers)
