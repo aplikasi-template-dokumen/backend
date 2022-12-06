@@ -189,8 +189,8 @@ module.exports = class {
             })
 
             if (result.length == 0) {
-                res.status(404).send({
-                    status: 400,
+                res.send({
+                    status: 404,
                     message: 'Data not exist!'
                 })
             }

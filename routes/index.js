@@ -1,18 +1,18 @@
 var express = require('express');
 var router = express.Router();
-
 const cors = require('cors')
+
 router.use(cors({
     // origin: 'http://127.0.0.1:3001'
     origin: '*'
 }))
 
-const func = require('../controllers/tesController')
+// const func = require('../controllers/tesController')
 const uc = require('../controllers/userController')
 const dc = require('../controllers/docController')
 const tc = require('../controllers/tempController')
 const mc = require('../controllers/moreController')
-const auth = require('../middleware/auth')
+const auth = require('../middleware/auth');
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -23,6 +23,9 @@ const auth = require('../middleware/auth')
 // router.get('/tes/:id', func.getPathParameter)
 // router.get('/books', func.getQueryParameter)
 // router.post('/form', isAdmin, func.getRequestBody)
+
+// TES UPLOAD IMAGE
+router.post('/tes/upload-img', uc.beforeEdit)
 
 // MAIN API (AVAILABLE FOR GUEST)
 router.post('/u/login', uc.login)

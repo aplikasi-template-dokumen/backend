@@ -2,6 +2,8 @@ const { users, role, occupations } = require('../models')
 const bcrypt = require('bcrypt')
 // const jwt = require("")
 
+const cloudinary = require('cloudinary').v2
+
 module.exports = class {
     static async getUsers(req, res) {
         try {
@@ -40,8 +42,10 @@ module.exports = class {
                     "email": result.email,
                     "full_name": result.full_name,
                     "username": result.username,
+                    "occupation_id": result.occupation_id,
                     "occupation": result.occ.name,
                     "affiliation": result.affiliation,
+                    "profile_img": result.profile_img
                 }
 
                 res.status(200).json({
@@ -162,6 +166,26 @@ module.exports = class {
         }
     }
 
+    static async beforeEdit(req, res) {
+        try {
+            const file = req.files.image
+            const result = await cloudinary.uploader.upload(file.tempFilePath, {
+                public_id: `${Date.now()}`,
+                resource_type: 'auto',
+                folder: 'images'
+            })
+    
+            res.status(200).json({
+                message: 'Berhasil',
+                result: result.secure_url
+            })
+        }
+    
+        catch(err) {
+            console.log(err)
+        }
+    }
+
     static async editUserProfile(req, res) {
         const check = await users.findOne({ where: { id: req.params.id } })
 
@@ -178,12 +202,13 @@ module.exports = class {
                     username: req.body.uname,
                     full_name: req.body.name,
                     occupation_id: req.body.occ_id,
-                    profile_img: req.body.img,
-                    affiliation: req.body.aff
+                    profile_img: req.body.profile_img,
+                    affiliation: req.body.aff,
                 }, { where: { id: req.params.id } })
 
                 res.status(201).send({
-                    message: 'User data has been updated!'
+                    message: 'User data has been updated!',
+                    uploadImage
                 })
             }
 
