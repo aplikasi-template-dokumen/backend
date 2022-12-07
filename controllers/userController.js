@@ -198,18 +198,43 @@ module.exports = class {
         
         else {
             try {
-                const result = await users.update({
-                    username: req.body.uname,
-                    full_name: req.body.name,
-                    occupation_id: req.body.occ_id,
-                    profile_img: req.body.profile_img,
-                    affiliation: req.body.aff,
-                }, { where: { id: req.params.id } })
+                if (req.body.image !== "undefined") {
+                    const file = req.files.image
 
-                res.status(201).send({
-                    message: 'User data has been updated!',
-                    uploadImage
-                })
+                    const img_result = await cloudinary.uploader.upload(file.tempFilePath, {
+                        public_id: `${Date.now()}`,
+                        resource_type: 'auto',
+                        folder: 'images'
+                    })
+
+                    const result = await users.update({
+                        username: req.body.uname,
+                        full_name: req.body.name,
+                        occupation_id: req.body.occ_id,
+                        profile_img: img_result.secure_url,
+                        affiliation: req.body.aff,
+                    }, { where: { id: req.params.id } })
+
+                    res.status(201).send({
+                        message: 'User data has been updated!',
+                        result
+                    })
+                }
+
+                else {
+                    const result = await users.update({
+                        username: req.body.uname,
+                        full_name: req.body.name,
+                        occupation_id: req.body.occ_id,
+                        profile_img: check.profile_img,
+                        affiliation: req.body.aff,
+                    }, { where: { id: req.params.id } })
+
+                    res.status(201).send({
+                        message: 'User data has been updated!',
+                        result
+                    })
+                }
             }
 
             catch(err) {
