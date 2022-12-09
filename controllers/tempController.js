@@ -1,6 +1,8 @@
 const { templates, users, categories, sub_categories, submission_status, sequelize } = require('../models')
 const { Op } = require('sequelize')
 
+const cloudinary = require('cloudinary').v2
+
 module.exports = class {
     static async getTemps(req, res) {
         try {
@@ -351,6 +353,8 @@ module.exports = class {
 
     static async editTemp(req, res) {
         const check = await templates.findOne({ where: { id: req.params.id } })
+        // console.log(req.body.data)
+        // console.log(JSON.parse(req.body.data))
 
         if (!check) {
             res.status(400).send({
@@ -369,30 +373,68 @@ module.exports = class {
 
         else {
             try {
-                const result = await templates.update({
-                    title: req.body.title,
-                    desc: req.body.desc,
-                    lang_id: req.body.lang_id,
-                    cat_id: req.body.cat_id,
-                    sub_cat_id: req.body.sub_cat_id,
-                    img: req.body.img,
-                    notes: req.body.notes,
-                    data: req.body.data,
-                    status_id: req.body.status_id
-                }, { where: { id: req.params.id } })
+                if (req.body.img !== 'undefined') {
+                    const file = req.files.img
 
-                if (!result) {
-                    res.status(400).send({
-                        status: 400,
-                        message: 'Update failed!'
+                    const img_result = await cloudinary.uploader.upload(file.tempFilePath, {
+                        public_id: `${Date.now()}`,
+                        resource_type: 'auto',
+                        folder: 'template_images'
                     })
+
+                    const result = await templates.update({
+                        title: req.body.title,
+                        desc: req.body.desc,
+                        lang_id: req.body.lang_id,
+                        cat_id: req.body.cat_id,
+                        sub_cat_id: req.body.sub_cat_id,
+                        img: img_result.secure_url,
+                        notes: req.body.notes,
+                        data: JSON.parse(req.body.data),
+                        status_id: req.body.status_id
+                    }, { where: { id: req.params.id } })
+
+                    if (!result) {
+                        res.status(400).send({
+                            status: 400,
+                            message: 'Update failed!'
+                        })
+                    }
+    
+                    else {
+                        res.status(201).send({
+                            status: 201,
+                            message: `Template with id ${req.params.id} has been updated!`
+                        })
+                    }
                 }
 
                 else {
-                    res.status(201).send({
-                        status: 201,
-                        message: `Template with id ${req.params.id} has been updated!`
-                    })
+                    const result = await templates.update({
+                        title: req.body.title,
+                        desc: req.body.desc,
+                        lang_id: req.body.lang_id,
+                        cat_id: req.body.cat_id,
+                        sub_cat_id: req.body.sub_cat_id,
+                        img: check.img,
+                        notes: req.body.notes,
+                        data: JSON.parse(req.body.data),
+                        status_id: req.body.status_id
+                    }, { where: { id: req.params.id } })
+
+                    if (!result) {
+                        res.status(400).send({
+                            status: 400,
+                            message: 'Update failed!'
+                        })
+                    }
+    
+                    else {
+                        res.status(201).send({
+                            status: 201,
+                            message: `Template with id ${req.params.id} has been updated!`
+                        })
+                    }
                 }
             }
 

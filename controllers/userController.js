@@ -7,7 +7,7 @@ const cloudinary = require('cloudinary').v2
 module.exports = class {
     static async getUsers(req, res) {
         try {
-            const result = await users.findAll();
+            const result = await users.findAll({ order: [['id', 'ASC']] });
             res.status(200).json({
                 status: 200,
                 data: result
@@ -204,7 +204,7 @@ module.exports = class {
                     const img_result = await cloudinary.uploader.upload(file.tempFilePath, {
                         public_id: `${Date.now()}`,
                         resource_type: 'auto',
-                        folder: 'images'
+                        folder: 'profile_images'
                     })
 
                     const result = await users.update({
