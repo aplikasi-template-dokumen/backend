@@ -19,6 +19,13 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/test', function(req, res) {
+    res.send({
+        status: 200,
+        message: 'Berhasil'
+    })
+})
+
 // router.get('/tes', func.getTestData)
 // router.get('/tes/:id', func.getPathParameter)
 // router.get('/books', func.getQueryParameter)

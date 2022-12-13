@@ -27,7 +27,7 @@ var server = http.createServer(app);
 
 var host_ip = process.env.NODE_ENV !== 'production' ? 'localhost' : '0.0.0.0'
 
-server.listen(port, '0.0.0.0', () => {
+server.listen(port, host_ip, () => {
   console.log(`Running at port ${port}`)
 });
 server.on('error', onError);
