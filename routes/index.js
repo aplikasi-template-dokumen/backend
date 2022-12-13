@@ -15,9 +15,9 @@ const mc = require('../controllers/moreController')
 const auth = require('../middleware/auth');
 
 /* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('index', { title: 'Express' });
-// });
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express' });
+});
 
 // router.get('/tes', func.getTestData)
 // router.get('/tes/:id', func.getPathParameter)
