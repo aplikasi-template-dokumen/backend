@@ -18,6 +18,7 @@
     "password": "111111",
     "database": "db_templatekita",
     "host": "13.212.186.186",
+    "port": "3001",
     "dialect": "postgres"
   }
 }
