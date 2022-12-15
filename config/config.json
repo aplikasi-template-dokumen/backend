@@ -14,10 +14,10 @@
     "dialect": "postgres"
   },
   "production": {
-    "username": "admin",
+    "username": "ubuntu",
     "password": "111111",
-    "database": "db_app_dokumen_production",
-    "host": "127.0.0.1",
+    "database": "db_templatedokumen",
+    "host": "13.212.186.186",
     "dialect": "postgres"
   }
 }
