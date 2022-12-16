@@ -3,7 +3,7 @@
     "username": "ubuntu",
     "password": "111111",
     "database": "db_templatekita",
-    "host": "13.212.186.186",
+    "host": "0.0.0.0",
     "dialect": "postgres"
   },
   "test": {
