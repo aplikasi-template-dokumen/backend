@@ -1,6 +1,7 @@
+require('dotenv').config()
 var express = require('express');
-var router = express.Router();
 const cors = require('cors')
+var router = express.Router();
 
 router.use(cors({
     // origin: 'http://127.0.0.1:3001'
