@@ -6,27 +6,9 @@ const db = require('../db')
 const cloudinary = require('cloudinary').v2
 
 module.exports = class {
-    // static async getUsers(req, res) {
-    //     try {
-    //         const result = await users.findAll({ order: [['id', 'ASC']] });
-    //         res.status(200).json({
-    //             status: 200,
-    //             data: result
-    //         })
-    //     }
-
-    //     catch (err) {
-    //         console.log(err);
-    //         res.send(err);
-    //     }
-    // }
-    
     static async getUsers(req, res) {
         try {
-            const result = await db.query(
-                "SELECT * from users"
-            )
-            
+            const result = await users.findAll({ order: [['id', 'ASC']] });
             res.status(200).json({
                 status: 200,
                 data: result
