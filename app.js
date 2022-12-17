@@ -8,6 +8,7 @@ const fileUpload = require('express-fileupload');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var apisRouter = require('./routes/apis')
 
 var app = express();
 
@@ -22,20 +23,6 @@ cloudinary.config({
     api_secret: 'g5LJ6FTNzDHM5zk0Ic6R7xg0dDY' 
 });
 
-// app.post('/upload/cloud', async (req, res) => {
-//     const file = req.files.image
-//     const result = await cloudinary.uploader.upload(file.tempFilePath, {
-//         public_id: `${Date.now()}`,
-//         resource_type: 'auto',
-//         folder: 'images'
-//     })
-
-//     res.json({
-//         status: 'Berhasil',
-//         secureUrl: result.secure_url
-//     })
-// })
-
 app.use(logger('dev'));
 app.use(express.json({}));
 app.use(express.urlencoded({ extended: false }));
@@ -46,5 +33,6 @@ app.use(express.urlencoded({limit:'50mb', extended: true, parameterLimit: 50000}
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api', apisRouter)
 
 module.exports = app;
