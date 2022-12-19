@@ -4,8 +4,8 @@ const cors = require('cors')
 var router = express.Router();
 
 router.use(cors({
-    origin: 'http://13.212.186.186:3001/'
-    // origin: '*'
+    // origin: 'http://13.212.186.186:3001/'
+    origin: '*'
 }))
 
 // const func = require('../controllers/tesController')
