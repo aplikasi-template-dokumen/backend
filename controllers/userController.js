@@ -209,7 +209,7 @@ module.exports = class {
                     })
 
                     if (check.profile_img !== null) {
-                        const split = check.profile_img.split('.')[3]
+                        const split = '.' + check.profile_img.split('.')[3]
                         const public_id = 'profile_images/' + (check.profile_img.split('profile_images/')[1]).split(split)[0]
                         cloudinary.uploader.destroy(public_id)
                     }

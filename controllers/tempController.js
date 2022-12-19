@@ -383,7 +383,7 @@ module.exports = class {
                     })
 
                     if (check.profile_img !== '/img-not-available.png') {
-                        const split = check.profile_img.split('.')[3]
+                        const split = '.' + check.profile_img.split('.')[3]
                         const public_id = 'template_images/' + (check.profile_img.split('template_images/')[1]).split(split)[0]
                         cloudinary.uploader.destroy(public_id)
                     }
