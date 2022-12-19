@@ -33,6 +33,5 @@ app.use(express.urlencoded({limit:'50mb', extended: true, parameterLimit: 50000}
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/api', apisRouter)
 
 module.exports = app;
