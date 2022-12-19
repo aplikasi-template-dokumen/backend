@@ -208,6 +208,11 @@ module.exports = class {
                         folder: 'profile_images'
                     })
 
+                    if (check.profile_img !== null) {
+                        const public_id = 'profile_images/' + (check.profile_img.split('profile_images/')[1]).split('.jpg')[0]
+                        cloudinary.uploader.destroy(public_id)
+                    }
+
                     const result = await users.update({
                         username: req.body.uname,
                         full_name: req.body.name,
