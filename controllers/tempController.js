@@ -382,6 +382,11 @@ module.exports = class {
                         folder: 'template_images'
                     })
 
+                    if (check.profile_img !== '/img-not-available.png') {
+                        const public_id = 'template_images/' + (check.profile_img.split('template_images/')[1]).split('.jpg')[0]
+                        cloudinary.uploader.destroy(public_id)
+                    }
+
                     const result = await templates.update({
                         title: req.body.title,
                         desc: req.body.desc,
