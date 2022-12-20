@@ -8,7 +8,6 @@ const fileUpload = require('express-fileupload');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var apisRouter = require('./routes/apis')
 
 var app = express();
 
