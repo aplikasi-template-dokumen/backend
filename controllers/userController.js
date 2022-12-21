@@ -1,7 +1,7 @@
 const { users, role, occupations } = require('../models')
 const bcrypt = require('bcrypt')
-// const jwt = require("")
-const db = require('../db')
+const jwt = require('jsonwebtoken')
+const dotenv = require('dotenv')
 
 const cloudinary = require('cloudinary').v2
 
@@ -104,6 +104,7 @@ module.exports = class {
                 username: req.body.uname,
                 occupation_id: req.body.occ_id,
                 password: hash,
+                // profile_img: '/images/default-profile.png',
                 profile_img: null,
                 affiliation: req.body.aff,
                 reviewer_id: null,
@@ -150,12 +151,21 @@ module.exports = class {
                 }
     
                 else {
-                    // res.header('role', user.role)
-                    // res.header('Access-Control-Allow-Origin', 'http://localhost:3000')
+                    const token = jwt.sign(
+                        {
+                            _i: user.id,
+                            _u: user.username,
+                            _r: user.role,
+                            _p: user.profile_img
+                        }, process.env.SECRET_TOKEN_KEY)
+
+                    res.header('token', token)
+
                     res.status(200).send({
                         status: 200,
                         message: 'Login success!',
-                        data: {"id": user.id, "username": user.username, "role": user.role}
+                        token
+                        // data: {"id": user.id, "username": user.username, "role": user.role}
                     })
                 }
             }

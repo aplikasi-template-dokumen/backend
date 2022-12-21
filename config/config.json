@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "ubuntu",
+    "username": "admin",
     "password": "111111",
-    "database": "db_templatekita",
+    "database": "db_app_dokumen",
     "dialect": "postgres"
   },
   "test": {

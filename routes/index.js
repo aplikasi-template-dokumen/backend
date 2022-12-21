@@ -13,7 +13,7 @@ const uc = require('../controllers/userController')
 const dc = require('../controllers/docController')
 const tc = require('../controllers/tempController')
 const mc = require('../controllers/moreController')
-const auth = require('../middleware/auth');
+const a = require('../middleware/auth');
 
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -28,7 +28,7 @@ router.get('/test', function(req, res) {
 })
 
 // TES UPLOAD IMAGE
-router.post('/tes/upload-img', uc.beforeEdit)
+// router.post('/tes/upload-img', uc.beforeEdit)
 
 // MAIN API (AVAILABLE FOR GUEST)
 router.post('/u/login', uc.login)
@@ -41,47 +41,49 @@ router.get('/t/filter/:lang/:sub', tc.filterTemp) //query parameter ?lang=&sub=
 // router.get('/t/:temp_id', tc.getTemplateById)
 
 // // LOGIN USER
+router.get('/u/info', a.verify_nav)
+
 router.get('/u/profile/:id', uc.getUserProfileById)
 router.post('/u/:id/edit-profile', uc.editUserProfile)
 router.post('/u/:id/change-pass', uc.changePassword)
 
-router.get('/d/user', dc.getDocsByUser) //query parameter ?id=
+router.get('/d/user', a.verify_uid, dc.getDocsByUser) //query parameter ?id=
 router.get('/d/:id', dc.getDocById)
 router.post('/d/create', dc.createDoc) //kalau pakai template, tambahin aja id-nya di query parameter
-router.post('/d/:id/edit', dc.editDoc) //save juga pakai ini, pakai query u_id=
-router.delete('/d/:id/delete', dc.deleteDoc) //save delete kah?
+router.post('/d/:id/edit', a.verify_uid, dc.editDoc) //save juga pakai ini, pakai query u_id=
+router.delete('/d/:id/delete', a.verify_uid, dc.deleteDoc) //save delete kah?
 
 // // router.post('/d/create/:temp_id', auth, dc.createDocByTemp)
 // //buat tampilan halaman kalau dokumennya kosong (belum pernah buat)
 
 // // CONTRIBUTOR
-router.get('/t/user', tc.getTempsByUser) //query ?id=
+router.get('/t/user', a.verify_cid, tc.getTempsByUser) //query ?id=
 router.get('/t/:id', tc.getTempById)
 router.post('/t/create', tc.createTemp) //query ?uid=
-router.post('/t/:id/edit', tc.editTemp)
-router.delete('/t/:id/delete', tc.deleteTemp)
+router.post('/t/:id/edit', a.verify_cid, tc.editTemp)
+router.delete('/t/:id/delete', a.verify_cid, tc.deleteTemp)
 
 // // REVIEWER
-router.get('/s', auth, tc.getSubmissions)
+router.get('/s', a.auth, tc.getSubmissions)
 router.get('/s/:id', tc.getSubmissionById)
 router.post('/s/:id/send-review', tc.sendReview) //konsepnya seperti edit submission
 
 // ADMIN
-router.get('/u', auth, uc.getUsers)
-router.get('/u/:id', auth, uc.getUserById)
-router.post('/u/update/:id', auth, uc.editUserByAdmin)
-// router.delete('/u/delete/:id', auth, uc.deleteUser)
-// router.post('/u/delete', auth, uc.deleteAllUser)
-// router.post('/u/disable/:id', auth, uc.softDeleteUser)
+router.get('/u', a.auth, uc.getUsers)
+router.get('/u/:id', a.auth, uc.getUserById)
+router.post('/u/update/:id', a.auth, uc.editUserByAdmin)
+// router.delete('/u/delete/:id', a.auth, uc.deleteUser)
+// router.post('/u/delete', a.auth, uc.deleteAllUser)
+// router.post('/u/disable/:id', a.auth, uc.softDeleteUser)
 router.post('/u/:id/change-user-pass', uc.changePasswordByAdmin)
 
-router.get('/d', auth, dc.getDocs)
+router.get('/d', a.auth, dc.getDocs)
 router.post('/d/:id/edit-admin', dc.editDocByAdmin)
-router.delete('/d/:id/delete-admin', auth, dc.deleteDocByAdmin)
+router.delete('/d/:id/delete-admin', a.auth, dc.deleteDocByAdmin)
 
-router.get('/t', auth, tc.getTemps)
+router.get('/t', a.auth, tc.getTemps)
 router.post('/t/:id/edit-admin', tc.editTempByAdmin)
-router.delete('/t/:id/delete-admin', auth, tc.deleteTempByAdmin)
+router.delete('/t/:id/delete-admin', a.auth, tc.deleteTempByAdmin)
 
 router.get('/c', mc.getCategories)
 router.get('/c/:id', mc.getCategoryById)

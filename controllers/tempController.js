@@ -1,5 +1,4 @@
 const { templates, users, categories, sub_categories, submission_status, sequelize } = require('../models')
-const { Op } = require('sequelize')
 
 const cloudinary = require('cloudinary').v2
 
@@ -214,7 +213,7 @@ module.exports = class {
 
     static async getTempsByUser(req, res) {
         try {
-            const result = await templates.findAll({ where: { contributor_id: req.query.id }, order: [['updatedAt', 'DESC']], include: [{ model: submission_status, attributes: ['name'], as: 'status' }] })
+            const result = await templates.findAll({ where: { contributor_id: req.uid }, order: [['updatedAt', 'DESC']], include: [{ model: submission_status, attributes: ['name'], as: 'status' }] })
 
             if (result.length == 0) {
                 res.send({
@@ -226,7 +225,8 @@ module.exports = class {
             else {
                 res.status(200).json({
                     status: 200,
-                    message: `All Templates with user id ${req.query.id}`,
+                    message: `All Templates with user id ${req.uid}`,
+                    uid: req.uid,
                     data: result
                 })
             }
@@ -364,7 +364,7 @@ module.exports = class {
         }
 
         else
-        if (check.contributor_id != req.query.u_id) {
+        if (check.contributor_id != req.uid) {
             res.status(400).send({
                 status: 400,
                 message: 'Only the author can edit this template!'

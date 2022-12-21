@@ -29,7 +29,7 @@ module.exports = class {
 
     static async getDocsByUser(req, res) {
         try {
-            const result = await documents.findAll({ where: { user_id: req.query.id }, order: [['updatedAt', 'DESC']] })
+            const result = await documents.findAll({ where: { user_id: req.uid }, order: [['updatedAt', 'DESC']] })
 
             if (result.length == 0) {
                 res.send({
@@ -41,7 +41,8 @@ module.exports = class {
             else {
                 res.status(200).json({
                     status: 200,
-                    message: `All Documents with user id ${req.query.id}`,
+                    message: `All Documents with user id ${req.uid}`,
+                    uid: req.uid,
                     data: result
                 })
             }
@@ -112,7 +113,7 @@ module.exports = class {
         }
 
         else
-        if (check.user_id != req.query.u_id) {
+        if (check.user_id != req.uid) {
             res.status(400).send({
                 status: 400,
                 message: 'Only the author can edit this document!'
