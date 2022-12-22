@@ -523,7 +523,7 @@ module.exports = class {
                 const result = await templates.update({
                     notes: req.body.notes,
                     status_id: req.body.status_id,
-                    reviewer_id: req.query.r_id,
+                    reviewer_id: req.uid,
                     publish_date: req.body.publish_date
                 }, { where: { id: req.params.id } })
 

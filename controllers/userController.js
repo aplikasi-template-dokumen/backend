@@ -23,7 +23,7 @@ module.exports = class {
 
     static async getUserProfileById(req, res) {
         try {
-            const result = await users.findOne({ where: {id: req.params.id},
+            const result = await users.findOne({ where: {id: req.uid},
                 include: [
                     { model: role, attributes: ['name'], as: 'role_name' },
                     { model: occupations, attributes: ['name'], as: 'occ' },
@@ -198,7 +198,7 @@ module.exports = class {
     }
 
     static async editUserProfile(req, res) {
-        const check = await users.findOne({ where: { id: req.params.id } })
+        const check = await users.findOne({ where: { id: req.uid } })
 
         if (!check) {
             res.status(400).send({
@@ -230,7 +230,7 @@ module.exports = class {
                         occupation_id: req.body.occ_id,
                         profile_img: img_result.secure_url,
                         affiliation: req.body.aff,
-                    }, { where: { id: req.params.id } })
+                    }, { where: { id: req.uid } })
 
                     res.status(201).send({
                         message: 'User data has been updated!',
@@ -245,7 +245,7 @@ module.exports = class {
                         occupation_id: req.body.occ_id,
                         profile_img: check.profile_img,
                         affiliation: req.body.aff,
-                    }, { where: { id: req.params.id } })
+                    }, { where: { id: req.uid } })
 
                     res.status(201).send({
                         message: 'User data has been updated!',
@@ -298,7 +298,7 @@ module.exports = class {
     }
 
     static async changePassword(req, res) {
-        const user = await users.findOne({ where: { id: req.params.id } })
+        const user = await users.findOne({ where: { id: req.uid } })
 
         if (!user) {
             res.status(400).send({
@@ -327,7 +327,7 @@ module.exports = class {
 
                     const result = await users.update({
                         password: hash
-                    }, { where: { id: req.params.id } })
+                    }, { where: { id: req.uid } })
     
                     res.status(201).send({
                         message: 'User password has been changed!'

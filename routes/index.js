@@ -43,9 +43,9 @@ router.get('/t/filter/:lang/:sub', tc.filterTemp) //query parameter ?lang=&sub=
 // // LOGIN USER
 router.get('/u/info', a.verify_nav)
 
-router.get('/u/profile/:id', uc.getUserProfileById)
-router.post('/u/:id/edit-profile', uc.editUserProfile)
-router.post('/u/:id/change-pass', uc.changePassword)
+router.get('/u/profile', a.verify_uid, uc.getUserProfileById)
+router.post('/u/edit-profile', a.verify_uid, uc.editUserProfile)
+router.post('/u/change-pass', a.verify_uid, uc.changePassword)
 
 router.get('/d/user', a.verify_uid, dc.getDocsByUser) //query parameter ?id=
 router.get('/d/:id', dc.getDocById)
@@ -64,9 +64,9 @@ router.post('/t/:id/edit', a.verify_cid, tc.editTemp)
 router.delete('/t/:id/delete', a.verify_cid, tc.deleteTemp)
 
 // // REVIEWER
-router.get('/s', a.auth, tc.getSubmissions)
-router.get('/s/:id', tc.getSubmissionById)
-router.post('/s/:id/send-review', tc.sendReview) //konsepnya seperti edit submission
+router.get('/s', a.verify_rid, tc.getSubmissions)
+router.get('/s/:id', a.verify_rid, tc.getSubmissionById)
+router.post('/s/:id/send-review', a.verify_rid, tc.sendReview) //konsepnya seperti edit submission
 
 // ADMIN
 router.get('/u', a.auth, uc.getUsers)
