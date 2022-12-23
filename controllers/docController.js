@@ -85,7 +85,7 @@ module.exports = class {
         try {
             const response = await documents.create({
                 title: req.body.title,
-                user_id: req.body.user_id,
+                user_id: req.uid,
                 data: req.body.data
             })
 
@@ -206,7 +206,6 @@ module.exports = class {
                     status: 200,
                     message: `Document with id ${req.params.id} has been deleted.`,
                 })
-                // console.log(req.params.id)
             }
 
             catch(err) {
@@ -233,7 +232,6 @@ module.exports = class {
                     status: 200,
                     message: `Document with id ${req.params.id} has been deleted.`,
                 })
-                // console.log(req.params.id)
             }
 
             catch(err) {

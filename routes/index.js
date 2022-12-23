@@ -8,24 +8,11 @@ router.use(cors({
     origin: '*'
 }))
 
-// const func = require('../controllers/tesController')
 const uc = require('../controllers/userController')
 const dc = require('../controllers/docController')
 const tc = require('../controllers/tempController')
 const mc = require('../controllers/moreController')
 const a = require('../middleware/auth');
-
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('index', { title: 'Express' });
-// });
-
-router.get('/test', function(req, res) {
-    res.send({
-        status: 200,
-        message: 'Berhasil'
-    })
-})
 
 // TES UPLOAD IMAGE
 // router.post('/tes/upload-img', uc.beforeEdit)
@@ -35,10 +22,9 @@ router.post('/u/login', uc.login)
 router.post('/u/regist', uc.createUser)
 
 router.get('/t-all', tc.getTempsAll)
-router.get('/t/search', tc.getTempByKeyword) //query parameter ?key=
+router.get('/t/search', tc.getTempByKeyword)
 router.get('/t/cat/:category', tc.getTempsByCategory)
-router.get('/t/filter/:lang/:sub', tc.filterTemp) //query parameter ?lang=&sub=
-// router.get('/t/:temp_id', tc.getTemplateById)
+router.get('/t/filter/:lang/:sub', tc.filterTemp)
 
 // // LOGIN USER
 router.get('/u/info', a.verify_nav)
@@ -47,14 +33,11 @@ router.get('/u/profile', a.verify_uid, uc.getUserProfileById)
 router.post('/u/edit-profile', a.verify_uid, uc.editUserProfile)
 router.post('/u/change-pass', a.verify_uid, uc.changePassword)
 
-router.get('/d/user', a.verify_uid, dc.getDocsByUser) //query parameter ?id=
+router.get('/d/user', a.verify_uid, dc.getDocsByUser)
 router.get('/d/:id', dc.getDocById)
-router.post('/d/create', dc.createDoc) //kalau pakai template, tambahin aja id-nya di query parameter
-router.post('/d/:id/edit', a.verify_uid, dc.editDoc) //save juga pakai ini, pakai query u_id=
+router.post('/d/create', a.verify_uid, dc.createDoc)
+router.post('/d/:id/edit', a.verify_uid, dc.editDoc)
 router.delete('/d/:id/delete', a.verify_uid, dc.deleteDoc) //save delete kah?
-
-// // router.post('/d/create/:temp_id', auth, dc.createDocByTemp)
-// //buat tampilan halaman kalau dokumennya kosong (belum pernah buat)
 
 // // CONTRIBUTOR
 router.get('/t/user', a.verify_cid, tc.getTempsByUser) //query ?id=

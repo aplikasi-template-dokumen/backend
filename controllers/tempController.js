@@ -31,7 +31,6 @@ module.exports = class {
 
     static async getTempsAll(req, res) {
         try {
-            // const result = await templates.findAll()
             const result = await templates.findAll({where: { status_id: 4 }, attributes: ['id', 'title', 'desc', 'img', 'data'], order: [['updatedAt', 'DESC']] })
 
             if (result.length == 0) {
@@ -165,8 +164,6 @@ module.exports = class {
                         message: `All templates with language id ${req.params.lang} and sub category id ${req.params.sub}`,
                         data: result
                     })
-                    
-                    // const result = await templates.findAll({ where: { [Op.and]: [{ lang_id: req.query.lang }, { sub_cat_id: req.query.sub }] } })
                 }
             }
         }
@@ -182,7 +179,6 @@ module.exports = class {
             let lookupValue = req.query.key.toLowerCase()
             console.log('key: ', lookupValue)
             const result = await templates.findAll({
-                // where: { title: { [Op.like]: "%" + req.query.key + "%" } }
                 where: {
                     title: sequelize.where(sequelize.fn('LOWER', sequelize.col('title')), 'LIKE', '%' + lookupValue + '%'),
                     status_id: 4
@@ -353,8 +349,6 @@ module.exports = class {
 
     static async editTemp(req, res) {
         const check = await templates.findOne({ where: { id: req.params.id } })
-        // console.log(req.body.data)
-        // console.log(JSON.parse(req.body.data))
 
         if (!check) {
             res.status(400).send({
@@ -566,7 +560,6 @@ module.exports = class {
                     status: 200,
                     message: `Template with id ${req.params.id} has been deleted.`,
                 })
-                // console.log(req.params.id)
             }
 
             catch(err) {
@@ -593,7 +586,6 @@ module.exports = class {
                     status: 200,
                     message: `Template with id ${req.params.id} has been deleted.`,
                 })
-                // console.log(req.params.id)
             }
 
             catch(err) {

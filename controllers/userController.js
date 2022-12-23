@@ -165,7 +165,6 @@ module.exports = class {
                         status: 200,
                         message: 'Login success!',
                         token
-                        // data: {"id": user.id, "username": user.username, "role": user.role}
                     })
                 }
             }
@@ -177,25 +176,25 @@ module.exports = class {
         }
     }
 
-    static async beforeEdit(req, res) {
-        try {
-            const file = req.files.image
-            const result = await cloudinary.uploader.upload(file.tempFilePath, {
-                public_id: `${Date.now()}`,
-                resource_type: 'auto',
-                folder: 'images'
-            })
+    // static async beforeEdit(req, res) {
+    //     try {
+    //         const file = req.files.image
+    //         const result = await cloudinary.uploader.upload(file.tempFilePath, {
+    //             public_id: `${Date.now()}`,
+    //             resource_type: 'auto',
+    //             folder: 'images'
+    //         })
     
-            res.status(200).json({
-                message: 'Berhasil',
-                result: result.secure_url
-            })
-        }
+    //         res.status(200).json({
+    //             message: 'Berhasil',
+    //             result: result.secure_url
+    //         })
+    //     }
     
-        catch(err) {
-            console.log(err)
-        }
-    }
+    //     catch(err) {
+    //         console.log(err)
+    //     }
+    // }
 
     static async editUserProfile(req, res) {
         const check = await users.findOne({ where: { id: req.uid } })
