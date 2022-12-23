@@ -14,7 +14,6 @@ const tc = require('../controllers/tempController')
 const mc = require('../controllers/moreController')
 const a = require('../middleware/auth');
 
-// TES UPLOAD IMAGE
 // router.post('/tes/upload-img', uc.beforeEdit)
 
 // MAIN API (AVAILABLE FOR GUEST)
@@ -40,16 +39,16 @@ router.post('/d/:id/edit', a.verify_uid, dc.editDoc)
 router.delete('/d/:id/delete', a.verify_uid, dc.deleteDoc) //save delete kah?
 
 // // CONTRIBUTOR
-router.get('/t/user', a.verify_cid, tc.getTempsByUser) //query ?id=
+router.get('/t/user', a.verify_cid, tc.getTempsByUser)
 router.get('/t/:id', tc.getTempById)
-router.post('/t/create', tc.createTemp) //query ?uid=
+router.post('/t/create', tc.createTemp)
 router.post('/t/:id/edit', a.verify_cid, tc.editTemp)
 router.delete('/t/:id/delete', a.verify_cid, tc.deleteTemp)
 
 // // REVIEWER
 router.get('/s', a.verify_rid, tc.getSubmissions)
 router.get('/s/:id', a.verify_rid, tc.getSubmissionById)
-router.post('/s/:id/send-review', a.verify_rid, tc.sendReview) //konsepnya seperti edit submission
+router.post('/s/:id/send-review', a.verify_rid, tc.sendReview)
 
 // ADMIN
 router.get('/u', a.auth, uc.getUsers)
