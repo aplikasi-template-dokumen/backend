@@ -357,13 +357,13 @@ module.exports = class {
             })
         }
 
-        else
-        if (check.contributor_id != req.uid) {
-            res.status(400).send({
-                status: 400,
-                message: 'Only the author can edit this template!'
-            })
-        }
+        // else
+        // if (check.contributor_id != req.uid) {
+        //     res.status(400).send({
+        //         status: 400,
+        //         message: 'Only the author can edit this template!'
+        //     })
+        // }
 
         else {
             try {

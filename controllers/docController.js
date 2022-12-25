@@ -112,13 +112,13 @@ module.exports = class {
             })
         }
 
-        else
-        if (check.user_id != req.uid) {
-            res.status(400).send({
-                status: 400,
-                message: 'Only the author can edit this document!'
-            })
-        }
+        // else
+        // if (check.user_id != req.uid || req.ur != 4) {
+        //     res.status(400).send({
+        //         status: 400,
+        //         message: 'Only the author can edit this document!'
+        //     })
+        // }
 
         else {
             try {

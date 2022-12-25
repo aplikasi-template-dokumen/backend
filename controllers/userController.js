@@ -8,7 +8,7 @@ const cloudinary = require('cloudinary').v2
 module.exports = class {
     static async getUsers(req, res) {
         try {
-            const result = await users.findAll({ order: [['id', 'ASC']] });
+            const result = await users.findAll({ order: [['id', 'ASC']], include: [{ model: role, attributes: ['name'], as: 'role_name' }] });
             res.status(200).json({
                 status: 200,
                 data: result
@@ -272,21 +272,56 @@ module.exports = class {
         
         else {
             try {
-                const result = await users.update({
-                    role: req.body.role,
-                    email: req.body.email,
-                    full_name: req.body.name,
-                    username: req.body.uname,
-                    occupation_id: req.body.occ_id,
-                    profile_img: req.body.img,
-                    affiliation: req.body.aff,
-                    reviewer_id: req.body.rev_id,
-                    enable: req.body.enable
-                }, { where: { id: req.params.id } })
+                if (req.body.image !== "undefined") {
+                    const file = req.files.image
 
-                res.status(201).send({
-                    message: 'User data has been updated!'
-                })
+                    const img_result = await cloudinary.uploader.upload(file.tempFilePath, {
+                        public_id: `${Date.now()}`,
+                        resource_type: 'auto',
+                        folder: 'profile_images'
+                    })
+
+                    if (check.profile_img !== null) {
+                        const split = '.' + check.profile_img.split('.')[3]
+                        const public_id = 'profile_images/' + (check.profile_img.split('profile_images/')[1]).split(split)[0]
+                        cloudinary.uploader.destroy(public_id)
+                    }
+
+                    const result = await users.update({
+                        role: req.body.role,
+                        email: req.body.email,
+                        full_name: req.body.name,
+                        username: req.body.uname,
+                        occupation_id: req.body.occ_id,
+                        profile_img: img_result.secure_url,
+                        affiliation: req.body.aff,
+                        reviewer_id: req.body.rev_id,
+                        enable: req.body.enable
+                    }, { where: { id: req.params.id } })
+
+                    res.status(201).send({
+                        message: 'User data has been updated!',
+                        result
+                    })
+                }
+
+                else {
+                    const result = await users.update({
+                        role: req.body.role,
+                        email: req.body.email,
+                        full_name: req.body.name,
+                        username: req.body.uname,
+                        occupation_id: req.body.occ_id,
+                        profile_img: check.profile_img,
+                        affiliation: req.body.aff,
+                        reviewer_id: req.body.rev_id,
+                        enable: req.body.enable
+                    }, { where: { id: req.params.id } })
+    
+                    res.status(201).send({
+                        message: 'User data has been updated!'
+                    })
+                }
             }
 
             catch(err) {

@@ -120,6 +120,7 @@ module.exports = class {
             
             if (verify._r == 4) {
                 req.uid = verify._i
+                // req.ur = verify._r
                 next()
             }
 
