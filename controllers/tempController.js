@@ -5,7 +5,7 @@ const cloudinary = require('cloudinary').v2
 module.exports = class {
     static async getTemps(req, res) {
         try {
-            const result = await templates.findAll()
+            const result = await templates.findAll({attributes: ['id', 'title', 'updatedAt'], include: [{ model: users, attributes: ['username'], as: 'contributor' }, { model: submission_status, attributes: ['name'], as: 'status' }]})
 
             if (result.length == 0) {
                 res.status(404).send({
@@ -31,7 +31,7 @@ module.exports = class {
 
     static async getTempsAll(req, res) {
         try {
-            const result = await templates.findAll({where: { status_id: 4 }, attributes: ['id', 'title', 'desc', 'img', 'data'], order: [['updatedAt', 'DESC']] })
+            const result = await templates.findAll({where: { status_id: 4 }, attributes: ['id', 'title', 'img'], order: [['updatedAt', 'DESC']] })
 
             if (result.length == 0) {
                 res.status(404).send({
@@ -63,7 +63,7 @@ module.exports = class {
                 const result = await templates.findAll({ where: { cat_id: req.params.category, status_id: 4 } })
     
                 if (result.length == 0) {
-                    res.status(404).send({
+                    res.send({
                         status: 400,
                         message: 'Data not exist!'
                     })
@@ -106,16 +106,17 @@ module.exports = class {
 
     static async filterTemp(req, res) {
         try {
-            console.log(req.params.lang)
-            console.log(req.params.sub)
+            // console.log(req.params.lang)
+            // console.log(req.params.sub)
 
             if (req.params.lang == 0) {
                 const result = await templates.findAll({ where: { sub_cat_id: req.params.sub, status_id: 4 } })
 
                 if (result.length == 0) {
-                    res.status(400).send({
+                    res.send({
                         status: 400,
-                        message: 'Data not exist!'
+                        message: 'Data not exist!',
+                        data: []
                     })
                 }
     
@@ -133,9 +134,10 @@ module.exports = class {
                 const result = await templates.findAll({ where: { lang_id: req.params.lang, status_id: 4 } })
 
                 if (result.length == 0) {
-                    res.status(400).send({
+                    res.send({
                         status: 400,
-                        message: 'Data not exist!'
+                        message: 'Data not exist!',
+                        data: []
                     })
                 }
     
@@ -152,9 +154,10 @@ module.exports = class {
                 const result = await templates.findAll({ where: { lang_id: req.params.lang, sub_cat_id: req.params.sub, status_id: 4 } })
 
                 if (result.length == 0) {
-                    res.status(400).send({
+                    res.send({
                         status: 400,
-                        message: 'Data not exist!'
+                        message: 'Data not exist!',
+                        data: []
                     })
                 }
     

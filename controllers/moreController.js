@@ -4,7 +4,7 @@ module.exports = class {
     /* CATEGORY */
     static async getCategories(req, res) {
         try {
-            const result = await categories.findAll()
+            const result = await categories.findAll({ order: [['id', 'ASC']] })
 
             if (result === null) {
                 res.status(400).send({
@@ -160,7 +160,7 @@ module.exports = class {
     /* SUB CATEGORY */
     static async getSubCategories(req, res) {
         try {
-            const result = await sub_categories.findAll()
+            const result = await sub_categories.findAll({ order: [['id', 'ASC']], include: [{model: categories, attributes: ['name'], as: 'category'}] })
 
             if (result === null) {
                 res.status(400).send({
@@ -278,7 +278,7 @@ module.exports = class {
         else {
             try {
                 const result = await sub_categories.update({
-                    sub_category: req.body.sub_category,
+                    category_id: req.body.category_id,
                     name: req.body.name,
                     order: req.body.order
                 }, { where: { id: req.params.id } })
@@ -344,7 +344,7 @@ module.exports = class {
     /* ROLES */
     static async getRoles(req, res) {
         try {
-            const result = await role.findAll()
+            const result = await role.findAll({ order: [['id', 'ASC']] })
 
             if (result === null) {
                 res.status(400).send({
@@ -499,7 +499,7 @@ module.exports = class {
     /* OCCUPATIONS */
     static async getOccupations(req, res) {
         try {
-            const result = await occupations.findAll()
+            const result = await occupations.findAll({ order: [['id', 'ASC']] })
 
             if (result === null) {
                 res.status(400).send({
@@ -655,7 +655,7 @@ module.exports = class {
     /* LANGUAGES */
     static async getLanguages(req, res) {
         try {
-            const result = await languages.findAll()
+            const result = await languages.findAll({ order: [['id', 'ASC']] })
 
             if (result === null) {
                 res.status(400).send({
@@ -811,7 +811,7 @@ module.exports = class {
     /* SUBMISSION STATUSES */
     static async getSubStatuses(req, res) {
         try {
-            const result = await submission_status.findAll()
+            const result = await submission_status.findAll({ order: [['id', 'ASC']] })
 
             if (result === null) {
                 res.status(400).send({
