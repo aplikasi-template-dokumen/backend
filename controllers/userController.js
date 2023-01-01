@@ -124,6 +124,43 @@ module.exports = class {
         }
     }
 
+    // static async createUserByAdmin(req, res) {
+    //     if (req.body.pass != req.body.repass) {
+    //         res.send('Password harus sama!')
+    //     }
+
+
+    //     const salt = await bcrypt.genSalt()
+    //     const hash = await bcrypt.hash(req.body.pass, salt)
+
+    //     try {
+    //         const response = await users.create({
+    //             role: req.body.role,
+    //             email: req.body.email,
+    //             full_name: req.body.name,
+    //             username: req.body.uname,
+    //             occupation_id: req.body.occ_id,
+    //             password: hash,
+    //             // profile_img: '/images/default-profile.png',
+    //             profile_img: null,
+    //             affiliation: req.body.aff,
+    //             reviewer_id: null,
+    //             enable: true
+    //         })
+
+    //         res.status(201).json({
+    //             status: 201,
+    //             message: "User Register Success!",
+    //             data: {"id": response.id, "username": response.username, "role": response.role}
+    //         })
+    //     }
+
+    //     catch (err) {
+    //         console.log(err)
+    //         res.send(err)
+    //     }
+    // }
+
     static async login(req, res) {
         try {
             const user = await users.findOne({
@@ -131,7 +168,7 @@ module.exports = class {
             })
 
             if (!user) {
-                res.status(400).send({
+                res.send({
                     status: 400,
                     message: 'Login failed!'
                 })
@@ -144,7 +181,7 @@ module.exports = class {
                 )
     
                 if (!isValidPass) {
-                    res.status(404).send({
+                    res.send({
                         status: 400,
                         message: 'Login Failed! (check pass)'
                     })
@@ -335,7 +372,7 @@ module.exports = class {
         const user = await users.findOne({ where: { id: req.uid } })
 
         if (!user) {
-            res.status(400).send({
+            res.send({
                 status: 400,
                 message: 'Data not exist!'
             })
@@ -349,7 +386,7 @@ module.exports = class {
                 )
 
                 if (!isValidOldPass || req.body.newPass !== req.body.newPassConf) {
-                    res.status(400).send({
+                    res.send({
                         status: 400,
                         message: 'Failed! Old password is wrong or new passwords are not same.'
                     })
