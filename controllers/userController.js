@@ -111,7 +111,13 @@ module.exports = class {
                 enable: true
             })
 
-            res.status(201).json({
+            // res.status(201).json({
+            //     status: 201,
+            //     message: "User Register Success!",
+            //     data: {"id": response.id, "username": response.username, "role": response.role}
+            // })
+            
+            res.json({
                 status: 201,
                 message: "User Register Success!",
                 data: {"id": response.id, "username": response.username, "role": response.role}
